@@ -102,7 +102,6 @@ def _init_cbv(cls: Type[Any], instance: Any = None) -> None:
 
 
 def _register_endpoints(router: APIRouter, cls: Type[Any], *urls: str) -> None:
-    cbv_router = APIRouter()
     function_members = inspect.getmembers(cls, inspect.isfunction)
     for url in urls:
         _allocate_routes_by_method_name(router, url, function_members)
@@ -130,8 +129,7 @@ def _register_endpoints(router: APIRouter, cls: Type[Any], *urls: str) -> None:
         route.path = route.path[prefix_length:]
         _update_cbv_route_endpoint_signature(cls, route)
         route.name = cls.__name__ + "." + route.name
-        cbv_router.routes.append(route)
-    router.include_router(cbv_router)
+        router.routes.append(route)
 
 
 def _allocate_routes_by_method_name(router: APIRouter, url: str, function_members: List[Tuple[str, Any]]) -> None:
